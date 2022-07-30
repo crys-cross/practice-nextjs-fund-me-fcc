@@ -7,11 +7,11 @@ import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import { useNotification } from "web3uikit" //component library(the other is css library)
 
-const LotteryEntrance = () => {
+const FundMe = () => {
     const { chainId: chainIdHex, isWeb3Enabled } = useMoralis()
     console.log(parseInt(chainIdHex))
     const chainId = parseInt(chainIdHex)
-    const raffleAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
+    const fundMeAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
     const [entranceFee, setEntranceFee] = useState("0") //[state or actual variable, the function to update it]
     const [numPlayers, setNumPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
@@ -120,4 +120,4 @@ const LotteryEntrance = () => {
         </div>
     )
 }
-export default LotteryEntrance
+export default FundMe
