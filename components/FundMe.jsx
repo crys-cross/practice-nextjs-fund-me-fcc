@@ -12,40 +12,40 @@ const FundMe = () => {
     console.log(parseInt(chainIdHex))
     const chainId = parseInt(chainIdHex)
     const fundMeAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
-    const [entranceFee, setEntranceFee] = useState("0") //[state or actual variable, the function to update it]
+    const [ethAmount, setEthAmount] = useState("0") //[state or actual variable, the function to update it]
     const [numPlayers, setNumPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
     const dispatch = useNotification() //little popup
 
     const {
-        runContractFunction: enterRaffle,
+        runContractFunction: Fund,
         isLoading,
         isFetching,
     } = useWeb3Contract({
         abi: abi,
-        contractAddress: raffleAddress, // specify network ID
+        contractAddress: fundMeAddress, // specify network ID
         functionName: "enterRaffle",
         params: {},
-        msgValue: entranceFee,
+        msgValue: ethAmount,
     })
 
-    const { runContractFunction: getEntranceFee } = useWeb3Contract({
+    const { runContractFunction: cheaperWithdraw } = useWeb3Contract({
         abi: abi,
-        contractAddress: raffleAddress, // specify network ID
-        functionName: "getEntranceFee",
+        contractAddress: fundMeAddress, // specify network ID
+        functionName: "cheaperWithdraw",
         params: {},
     })
 
-    const { runContractFunction: getNumberOfplayers } = useWeb3Contract({
+    const { runContractFunction: getaddressToAmountFunded } = useWeb3Contract({
         abi: abi,
-        contractAddress: raffleAddress, // specify network ID
-        functionName: "getNumberOfplayers",
-        params: {},
+        contractAddress: fundMeAddress, // specify network ID
+        functionName: "getaddressToAmountFunded",
+        params: { funder }, //get params
     })
 
     const { runContractFunction: getRecentWinner } = useWeb3Contract({
         abi: abi,
-        contractAddress: raffleAddress, // specify network ID
+        contractAddress: fundMeAddress, // specify network ID
         functionName: "getRecentWinner",
         params: {},
     })
@@ -87,12 +87,14 @@ const FundMe = () => {
     return (
         <div className="p-5">
             Hi from Raffle Entrance
-            {raffleAddress ? (
+            {fundMeAddress ? (
                 <div>
+                    <label for="fund">ETH Amount</label>
+                    <input id="ethAmount" placeholder="0.1" />
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
                         onclick={async () => {
-                            await enterRaffle({
+                            await Fund({
                                 //onComplete:
                                 onSuccess: handleSuccess, //only checks to see if transaction is sent to metamask
                                 onError: (error) => {
