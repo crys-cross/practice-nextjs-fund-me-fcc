@@ -12,7 +12,8 @@ const FundMe = () => {
     console.log(parseInt(chainIdHex))
     const chainId = parseInt(chainIdHex)
     const fundMeAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
-    const [ethAmount, setEthAmount] = useState("0") //[state or actual variable, the function to update it]
+    const ethAmount = document.getElementById("ethAmount").value
+    // const [ethAmount, setEthAmount] = useState("0") //[state or actual variable, the function to update it]
     const [numPlayers, setNumPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
     const dispatch = useNotification() //little popup
@@ -36,28 +37,28 @@ const FundMe = () => {
         params: {},
     })
 
-    const { runContractFunction: getaddressToAmountFunded } = useWeb3Contract({
-        abi: abi,
-        contractAddress: fundMeAddress, // specify network ID
-        functionName: "getaddressToAmountFunded",
-        params: { funder }, //get params
-    })
+    // const { runContractFunction: getaddressToAmountFunded } = useWeb3Contract({
+    //     abi: abi,
+    //     contractAddress: fundMeAddress, // specify network ID
+    //     functionName: "getaddressToAmountFunded",
+    //     params: { funder }, //get params
+    // })
 
-    const { runContractFunction: getRecentWinner } = useWeb3Contract({
-        abi: abi,
-        contractAddress: fundMeAddress, // specify network ID
-        functionName: "getRecentWinner",
-        params: {},
-    })
+    // const { runContractFunction: getRecentWinner } = useWeb3Contract({
+    //     abi: abi,
+    //     contractAddress: fundMeAddress, // specify network ID
+    //     functionName: "getRecentWinner",
+    //     params: {},
+    // })
 
     const updateUI = async () => {
-        const entranceFeeFromCall = (await getEntranceFee()).toString()
-        const numpleyersFromCall = (await getNumberOfplayers()).toString()
-        const recentWinnerFromCall = await getRecentWinner()
-        setEntranceFee(entranceFeeFromCall)
-        setNumPlayers(numpleyersFromCall)
-        setRecentWinner(recentWinnerFromCall)
-        console.log(entranceFee)
+        // const entranceFeeFromCall = (await getEntranceFee()).toString()
+        // const numpleyersFromCall = (await getNumberOfplayers()).toString()
+        // const recentWinnerFromCall = await getRecentWinner()
+        // setEntranceFee(entranceFeeFromCall)
+        // setNumPlayers(numpleyersFromCall)
+        // setRecentWinner(recentWinnerFromCall)
+        console.log(ethAmount)
     }
 
     useEffect(() => {
@@ -77,7 +78,7 @@ const FundMe = () => {
     const handleNewNotification = () => {
         dispatch({
             type: "info",
-            message: "Transaction Complete",
+            message: "Funding of ${ethAmount} Complete",
             title: "Tx Notification",
             position: "topR",
             icon: "bell",
@@ -86,7 +87,7 @@ const FundMe = () => {
 
     return (
         <div className="p-5">
-            Hi from Raffle Entrance
+            Simple FundMe App
             {fundMeAddress ? (
                 <div>
                     <label for="fund">ETH Amount</label>
@@ -107,7 +108,7 @@ const FundMe = () => {
                         {isLoading || isFetching ? (
                             <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
                         ) : (
-                            <div>Enter Raffle</div>
+                            <div>Fund</div>
                         )}
                     </button>
                     <div>
@@ -117,7 +118,7 @@ const FundMe = () => {
                     <div>Recent Winner: {recentWinner}</div>
                 </div>
             ) : (
-                <div>No Raffle Address Detected</div>
+                <div>Please Connect your Metamask</div>
             )}
         </div>
     )
