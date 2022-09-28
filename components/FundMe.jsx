@@ -1,22 +1,29 @@
 // have function to enter Lottery
 // TODO Challenge: update recentWinner by event trigger
 import { useWeb3Contract } from "react-moralis"
-import { abi, contractAddresses } from "../constants"
+import { abi, contractAddresses } from "../constants/index.js"
 import { useMoralis } from "react-moralis"
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
-import { useNotification } from "web3uikit" //component library(the other is css library)
+import { Input, useNotification } from "web3uikit" //component library(the other is css library)
 
 const FundMe = () => {
-    const { chainId: chainIdHex, isWeb3Enabled } = useMoralis()
+    const { chainId: chainIdHex } = useMoralis()
+    const { Moralis, isWeb3Enabled } = useMoralis()
+    console.log(`Chain ID is ${chainIdHex}`)
     console.log(parseInt(chainIdHex))
-    const chainId = parseInt(chainIdHex)
-    const fundMeAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
-    const ethAmount = document.getElementById("ethAmount").value
+    const chainId1 = parseInt(chainIdHex)
+    const fundMeAddress = chainId1 in contractAddresses ? contractAddresses[chainId][0] : null
+    // const ethAmount = document.getElementById("ethAmount").value
     // const [ethAmount, setEthAmount] = useState("0") //[state or actual variable, the function to update it]
-    const [numPlayers, setNumPlayers] = useState("0")
-    const [recentWinner, setRecentWinner] = useState("0")
+    const [funders, setFunders] = useState("0")
+    const [amountFunded, setAmountFunded] = useState("0")
+    const [ethAmount, setEthAmount] = useState()
     const dispatch = useNotification() //little popup
+
+    //workaround chainId
+    // web3 = await Moralis.enableWeb3()
+    // x = await web3.detectNetwork()
 
     const {
         runContractFunction: Fund,
@@ -78,7 +85,7 @@ const FundMe = () => {
     const handleNewNotification = () => {
         dispatch({
             type: "info",
-            message: "Funding of ${ethAmount} Complete",
+            message: `Funding of ${ethAmount} Complete`,
             title: "Tx Notification",
             position: "topR",
             icon: "bell",
@@ -90,8 +97,15 @@ const FundMe = () => {
             Simple FundMe App
             {fundMeAddress ? (
                 <div>
-                    <label for="fund">ETH Amount</label>
-                    <input id="ethAmount" placeholder="0.1" />
+                    <Input
+                        label="ETH Amount"
+                        name="EthAmount"
+                        type="number"
+                        onChange={(event) => {
+                            setEthAmount(Number(event.target.value))
+                        }}
+                        state={isLoading || isFetching ? "disabled" : "initial"}
+                    />
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
                         onclick={async () => {
@@ -111,11 +125,11 @@ const FundMe = () => {
                             <div>Fund</div>
                         )}
                     </button>
-                    <div>
+                    {/* <div>
                         Entrance Fee: {ethers.utils.formatUnits(entranceFeeFromCall, "ethers")} ETH
                     </div>
                     <div>Number of Players: {numPlayers}</div>
-                    <div>Recent Winner: {recentWinner}</div>
+                    <div>Recent Winner: {recentWinner}</div> */}
                 </div>
             ) : (
                 <div>Please Connect your Metamask</div>
