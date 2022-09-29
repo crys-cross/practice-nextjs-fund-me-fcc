@@ -12,8 +12,8 @@ const FundMe = () => {
     const { Moralis, isWeb3Enabled } = useMoralis()
     console.log(`Chain ID is ${chainIdHex}`)
     console.log(parseInt(chainIdHex))
-    const chainId1 = parseInt(chainIdHex)
-    const fundMeAddress = chainId1 in contractAddresses ? contractAddresses[chainId][0] : null
+    const chainId = parseInt(chainIdHex)
+    const fundMeAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null
     // const ethAmount = document.getElementById("ethAmount").value
     // const [ethAmount, setEthAmount] = useState("0") //[state or actual variable, the function to update it]
     const [funders, setFunders] = useState("0")
@@ -93,8 +93,8 @@ const FundMe = () => {
     }
 
     return (
-        <div className="p-5">
-            Simple FundMe App
+        <div className="flex md:flex-row flex-col-reverse sm:py-16 py-6">
+            <h2>Simple FundMe App</h2>
             {fundMeAddress ? (
                 <div>
                     <Input
