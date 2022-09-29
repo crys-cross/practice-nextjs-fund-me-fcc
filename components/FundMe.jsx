@@ -93,8 +93,8 @@ const FundMe = () => {
     }
 
     return (
-        <div className="flex md:flex-row flex-col-reverse sm:py-16 py-6">
-            <h2>Simple FundMe App</h2>
+        <div className="flex flex-col-reverse sm:py-16 py-6">
+            <h2 className="py-2 px-4 font-bold text-3xl mb-4">Simple FundMe App</h2>
             {fundMeAddress ? (
                 <div>
                     <Input
