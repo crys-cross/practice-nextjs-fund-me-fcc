@@ -19,6 +19,7 @@ const FundMe = () => {
     const [funders, setFunders] = useState("0")
     const [amountFunded, setAmountFunded] = useState("0")
     const [ethAmount, setEthAmount] = useState()
+    // const userAddress =
     const dispatch = useNotification() //little popup
 
     //workaround chainId
